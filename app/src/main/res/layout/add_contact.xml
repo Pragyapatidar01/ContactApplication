@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/contact_imageview1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="TODO"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:id="@+id/contact_form1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_below="@id/contact_imageview1">
+
+        <EditText
+            android:id="@+id/full_name_edittext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:hint="Enter Name"
+            android:inputType="text"
+            android:autofillHints="" />
+
+        <EditText
+            android:id="@+id/phone_number_edittext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:hint="Enter Phone Number"
+            android:inputType="phone"
+            android:autofillHints=""/>
+
+        <EditText
+            android:id="@+id/email_edittext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:hint="Enter Email"
+            android:inputType="textEmailAddress"
+            android:autofillHints=""/>
+
+        <EditText
+            android:id="@+id/company_edittext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:hint="Enter Company"
+            android:inputType="text"
+            android:autofillHints=""/>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:layout_below="@+id/contact_form1"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
