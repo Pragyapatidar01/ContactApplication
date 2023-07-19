@@ -1,12 +1,17 @@
 package com.practice.contactapplication.View.Controllers;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,8 +21,8 @@ import com.bluelinelabs.conductor.Controller;
 import com.practice.contactapplication.ContactContract;
 import com.practice.contactapplication.ContactPresenter;
 import com.practice.contactapplication.ContactRepository;
-import com.practice.contactapplication.R;
 import com.practice.contactapplication.View.UpdateContactCallback;
+import com.practice.contactapplication.databinding.AddContactBinding;
 import com.practice.contactapplication.di.ContactModule;
 import com.practice.contactapplication.di.DaggerContactComponent;
 import com.practice.contactapplication.models.Contact;
@@ -32,6 +37,9 @@ public class AddContactController extends Controller implements ContactContract.
     ContactRepository repository;
     UpdateContactCallback callback;
 
+    Contact contact = new Contact();
+
+    AddContactBinding addContactBinding;
     public AddContactController() {
         // Required empty public constructor
     }
@@ -53,20 +61,27 @@ public class AddContactController extends Controller implements ContactContract.
     @NonNull
     @Override
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedViewState) {
-        View rootView = inflater.inflate(R.layout.add_contact, container, false);
+        addContactBinding = AddContactBinding.inflate(inflater, container, false);
+        View rootView = addContactBinding.getRoot();
 
-        EditText fullNameEditText = rootView.findViewById(R.id.full_name_edittext1);
-        EditText phoneNumberEditText = rootView.findViewById(R.id.phone_number_edittext1);
-        EditText emailEditText = rootView.findViewById(R.id.email_edittext1);
-        EditText companyEditText = rootView.findViewById(R.id.company_edittext1);
-        /*ImageView imageView = rootView.findViewById(R.id.contact_imageview1);*/
-        Button addButton = rootView.findViewById(R.id.add_button);
+        EditText fullNameEditText = addContactBinding.fullNameEdittext1;
+        EditText phoneNumberEditText = addContactBinding.phoneNumberEdittext1;
+        EditText emailEditText = addContactBinding.emailEdittext1;
+        EditText companyEditText = addContactBinding.companyEdittext1;
+        Button selectImageButton = addContactBinding.selectImageBtn;
+        Button addButton = addContactBinding.addButton;
+
+
+        selectImageButton.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
 
         addButton.setOnClickListener(v -> {
 
             boolean isAllFieldsChecked = checkAllFields(fullNameEditText, phoneNumberEditText);
             if(isAllFieldsChecked){
-                Contact contact = new Contact();
+
                 contact.setFullName(fullNameEditText.getText().toString());
                 contact.setPhoneNumber(phoneNumberEditText.getText().toString());
                 contact.setEmail(emailEditText.getText().toString());
@@ -115,4 +130,20 @@ public class AddContactController extends Controller implements ContactContract.
     public void showError(String message) {
         Toast.makeText(getApplicationContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+            ImageView imageView = addContactBinding.contactImageview1;
+            imageView.setImageURI(selectedImageUri);
+
+            String imageUrl = selectedImageUri.toString();
+            contact.setImageUri(imageUrl);
+        }
+    }
+
+    private static final int PICK_IMAGE_REQUEST = 1;
 }

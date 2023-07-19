@@ -14,14 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bluelinelabs.conductor.Controller;
+import com.bumptech.glide.Glide;
 import com.practice.contactapplication.ContactContract;
 import com.practice.contactapplication.ContactPresenter;
 import com.practice.contactapplication.ContactRepository;
 import com.practice.contactapplication.R;
 import com.practice.contactapplication.View.UpdateContactCallback;
+import com.practice.contactapplication.databinding.AddContactBinding;
+import com.practice.contactapplication.databinding.ContactDetailsBinding;
 import com.practice.contactapplication.di.ContactModule;
 import com.practice.contactapplication.di.DaggerContactComponent;
 import com.practice.contactapplication.models.Contact;
+import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -34,6 +40,8 @@ public class ContactDetailsController extends Controller implements ContactContr
     ContactRepository repository;
 
     UpdateContactCallback callback;
+
+    ContactDetailsBinding contactDetailsBinding;
 
     public ContactDetailsController() {
         // Required empty public constructor
@@ -61,19 +69,22 @@ public class ContactDetailsController extends Controller implements ContactContr
     @NonNull
     @Override
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedViewState) {
-        View rootView = inflater.inflate(R.layout.contact_details, container, false);
+        contactDetailsBinding = ContactDetailsBinding.inflate(inflater, container, false);
+        View rootView = contactDetailsBinding.getRoot();
 
-        EditText fullNameEditText = rootView.findViewById(R.id.full_name_edittext);
-        EditText phoneNumberEditText = rootView.findViewById(R.id.phone_number_edittext);
-        EditText emailEditText = rootView.findViewById(R.id.email_edittext);
-        EditText companyEditText = rootView.findViewById(R.id.company_edittext);
-        Button updateButton = rootView.findViewById(R.id.update_button);
-        Button deleteButton = rootView.findViewById(R.id.delete_button);
+        EditText fullNameEditText = contactDetailsBinding.fullNameEdittext;
+        EditText phoneNumberEditText = contactDetailsBinding.phoneNumberEdittext;
+        EditText emailEditText = contactDetailsBinding.emailEdittext;
+        EditText companyEditText = contactDetailsBinding.companyEdittext;
+        Button updateButton = contactDetailsBinding.updateButton;
+        Button deleteButton = contactDetailsBinding.deleteButton;
 
         fullNameEditText.setText(contact.getFullName());
         phoneNumberEditText.setText(contact.getPhoneNumber());
         emailEditText.setText(contact.getEmail());
         companyEditText.setText(contact.getCompany());
+        String imageUrl = contact.getImageUri();
+        displayImage(imageUrl);
 
         updateButton.setOnClickListener(v -> {
 
@@ -95,6 +106,13 @@ public class ContactDetailsController extends Controller implements ContactContr
         });
 
         return rootView;
+    }
+
+    private void displayImage(String imageUrl) {
+        ImageView imageView = contactDetailsBinding.contactImageview;
+        Glide.with(Objects.requireNonNull(this.getActivity()))
+                .load(imageUrl)
+                .into(imageView);
     }
 
     @Override

@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">-->
-
-<!--<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/contact_recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />-->
-
-
-
+<layout>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/controller_container"
     android:layout_width="match_parent"
@@ -25,6 +14,7 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:text="Add"
+            android:backgroundTint="#FF7955B8"
             android:layout_margin="20dp"/>
 
         <LinearLayout
@@ -44,7 +34,4 @@
     </RelativeLayout>
 
 </FrameLayout>
-
-
-    <!--
-    </RelativeLayout>-->
+</layout>

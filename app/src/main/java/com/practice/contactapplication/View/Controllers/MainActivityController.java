@@ -32,6 +32,8 @@ import com.practice.contactapplication.View.UpdateContactCallback;
 import com.practice.contactapplication.database.ContactDao;
 import com.practice.contactapplication.database.ContactDatabase;
 import com.practice.contactapplication.database.ContactEntity;
+import com.practice.contactapplication.databinding.ActivityMainBinding;
+import com.practice.contactapplication.databinding.ContactDetailsBinding;
 import com.practice.contactapplication.di.ContactComponent;
 import com.practice.contactapplication.di.ContactModule;
 import com.practice.contactapplication.di.DaggerContactComponent;
@@ -51,6 +53,7 @@ public class MainActivityController extends Controller implements ContactContrac
     ContactRepository repository;
 
     private ContactListAdapter contactListAdapter;
+    ActivityMainBinding activityMainBinding;
 
     @Override
     protected void onContextAvailable(@NonNull Context context) {
@@ -64,18 +67,20 @@ public class MainActivityController extends Controller implements ContactContrac
     @NonNull
     @Override
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedViewState) {
-        View rootView = inflater.inflate(R.layout.activity_main, container, false);
 
-        ListView contactListView = rootView.findViewById(R.id.contact_list);
+        activityMainBinding = ActivityMainBinding.inflate(inflater, container, false);
+        View rootView = activityMainBinding.getRoot();
 
-        contactListAdapter = new ContactListAdapter(inflater.getContext());
+        ListView contactListView = activityMainBinding.contactList;
+
+        contactListAdapter = new ContactListAdapter(inflater.getContext(), this.getActivity());
         contactListView.setAdapter(contactListAdapter);
         contactListView.setOnItemClickListener((parent, view, position, id) -> {
             Contact contact = (Contact) contactListView.getItemAtPosition(position);
             presenter.onContactClicked(contact);
         });
 
-        Button addButton = rootView.findViewById(R.id.add_button);
+        Button addButton = activityMainBinding.addButton;
         addButton.setOnClickListener(v -> presenter.onAddButtonClicked());
 
         return rootView;
